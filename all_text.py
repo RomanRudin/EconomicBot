@@ -19,5 +19,5 @@ class All_Text:
 
     # buttons text
     button_graph = 'Построить общую КПВ'
-
-
+    button_back_to_menu = 'Вернуться на главную'
+    button_indev = 'Кнопка еще не готова' 

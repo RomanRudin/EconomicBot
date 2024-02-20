@@ -3,45 +3,28 @@ import asyncio
 from aiogram import Bot, Dispatcher, types, F
 from aiogram.filters import Command
 
+from main_router import router as main_router
+
 from config import BOT_TOCKEN
 from all_text import All_Text
+from keyboards import create_keyboard
 import keyboards
 
 
 bot = Bot(token=BOT_TOCKEN)
 dp = Dispatcher()
 
+dp.include_router(main_router)
 
-@dp.message(F.text == 'Назад')
+
 @dp.message(Command("start"))
 async def handle_start(message: types.Message):
 
-    kb = keyboards.start_keyboard
-    keyboard = types.ReplyKeyboardMarkup(
-       keyboard=kb,
-       resize_keyboard=True,
-       input_field_placeholder=All_Text.keyboard_text_start 
-    )
-
     await message.answer(
         text=f"Приветствую, {message.from_user.full_name}!" + All_Text.start_message,
-        reply_markup=keyboard
+        reply_markup=create_keyboard(keyboard_name="start_keyboard")
     )
     await message.answer(text=All_Text.second_start_message)
-
-
-@dp.message(F.text == All_Text.button_graph)
-async def build_graph(message: types.Message):
-    kb = keyboards.graph_kpv_keyboard
-    keyboard = types.ReplyKeyboardMarkup(
-       keyboard=kb,
-       resize_keyboard=True,
-       input_field_placeholder=All_Text.keyboard_text_start 
-    )
-    await message.answer(
-        text="Построение графика КПВ",
-        reply_markup=keyboard
-    )
 
 
 async def main():
