@@ -55,7 +55,7 @@ def draw_graph(max_a_for_first: int, max_b_for_first: int, max_a_for_second: int
     axes.add_patch(polygon_1)
     axes.add_patch(polygon_2)
 
-    file_name = "photo/graph.png"
+    file_name = f"photo/{str(max_a_for_first)+str(max_a_for_first*max_b_for_first*max_a_for_second*max_b_for_second)+str(max_b_for_second)}.png"
     plt.savefig(file_name)
 
     plt.close()
