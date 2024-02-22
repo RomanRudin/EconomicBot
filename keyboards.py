@@ -13,8 +13,23 @@ keyboards = {
             types.KeyboardButton(text=All_Text.button_indev),
         ]
     ],
+
     "graph_kpv_keyboard" : [
         [types.KeyboardButton(text=All_Text.button_back_to_menu)]
+    ],
+
+    "help_keyboard" : [
+        [
+            types.KeyboardButton(text=All_Text.button_help_1),
+            types.KeyboardButton(text=All_Text.button_help_2)
+        ],
+        [
+            types.KeyboardButton(text=All_Text.button_help_3),
+            types.KeyboardButton(text=All_Text.button_help_4)
+        ],
+        [
+            types.KeyboardButton(text=All_Text.button_back_to_menu)
+        ]
     ]
 }
 

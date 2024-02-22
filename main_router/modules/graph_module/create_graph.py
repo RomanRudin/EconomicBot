@@ -2,7 +2,7 @@ from matplotlib import pyplot as plt
 
 
 def draw_graph(max_a_for_first: int, max_b_for_first: int, max_a_for_second: int, max_b_for_second: int) -> str: 
-    
+
     plt.title('График общей КПВ', fontsize= 25 , loc='center') 
     plt.xlabel("Товар А", fontsize=15)
     plt.ylabel("Товар Б", fontsize=15)
@@ -55,7 +55,7 @@ def draw_graph(max_a_for_first: int, max_b_for_first: int, max_a_for_second: int
     axes.add_patch(polygon_1)
     axes.add_patch(polygon_2)
 
-    file_name = f"photo/{str(max_a_for_first)+str(max_a_for_first*max_b_for_first*max_a_for_second*max_b_for_second)+str(max_b_for_second)}.png"
+    file_name = f"photo/graph{((max_a*max_b)-max_a_between_person)}.png"
     plt.savefig(file_name)
 
     plt.close()
