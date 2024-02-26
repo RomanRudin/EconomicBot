@@ -4,6 +4,7 @@ from random import randint
 from all_text import All_Text
 from main_router.modules.help_module import help
 from main_router.modules.graph_module import graph
+from main_router.modules.ep_module import equilibrium_point as ep
 
 router = Router(name=__name__)
 
@@ -53,19 +54,37 @@ async def text_react(message: types.Message):
         id_mes = int(message.text)
         if 1 <= id_mes <= 4:
             await help.info_message(message, id_mes)
-            
-    elif graph.make_graph_flag and message.text[0] == "-":
-        await message.answer(All_Text.incorrect_negative_num_text)
 
-    elif graph.make_graph_flag and message.text[0] in "0123456789":
-        try:
-            int(message.text)
-            await graph.create_graph(message)
-        except ValueError:
-            await message.answer(All_Text.incorrect_num_text)
+    elif graph.make_graph_flag:
+        if message.text[0] == "-":
+            await message.answer(All_Text.incorrect_negative_num_text)
+            await message.answer(All_Text.correct_data_example)
+
+        elif message.text[0] in "0123456789":
+            try:
+                int(message.text)
+                await graph.create_graph(message)
+            except ValueError:
+                await message.answer(All_Text.incorrect_num_text)
+                await message.answer(All_Text.correct_data_example)
+
+    elif ep.calculate_ep_flag:
+        if message.text[0] == "-":
+            await message.answer(All_Text.incorrect_negative_num_text)
+            await message.answer(All_Text.correct_data_example)
+
+        elif message.text[0] in "0123456789":
+            try:
+                float(message.text)
+                await ep.calculate_ep(message)
+            except ValueError:
+                await message.answer(All_Text.incorrect_num_text)
+                await message.answer(All_Text.correct_data_example)
     
-    elif graph.make_graph_flag or help.help_flag:
+    elif graph.make_graph_flag or help.help_flag or ep.calculate_ep_flag:
         await message.answer(All_Text.incorrect_data_text)
+        if graph.make_graph_flag:
+            await message.answer(All_Text.correct_data_example)
 
     else:
         await message.answer(All_Text.incorrect_command)

@@ -6,7 +6,7 @@ keyboards = {
     "start_keyboard" : [
         [
             types.KeyboardButton(text=All_Text.button_graph),
-            types.KeyboardButton(text=All_Text.button_indev),
+            types.KeyboardButton(text=All_Text.button_equilibrium_point),
         ],
         [
             types.KeyboardButton(text=All_Text.button_indev),
@@ -15,6 +15,10 @@ keyboards = {
     ],
 
     "graph_kpv_keyboard" : [
+        [types.KeyboardButton(text=All_Text.button_back_to_menu)]
+    ],
+
+    "equilibrium_point_kb" : [
         [types.KeyboardButton(text=All_Text.button_back_to_menu)]
     ],
 

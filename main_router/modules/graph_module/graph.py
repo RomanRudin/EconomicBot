@@ -8,13 +8,13 @@ router = Router(name=__name__)
 
 
 make_graph_flag = False
-counter = 0
+counter = 1
 request_data = []
 
 
 @router.message(F.text == All_Text.button_graph)
 async def change_flag(message: types.Message):
-    global make_graph_flag, counter
+    global make_graph_flag
 
 
     await message.answer(
@@ -22,16 +22,15 @@ async def change_flag(message: types.Message):
         reply_markup=create_keyboard(keyboard_name="graph_kpv_keyboard")
     )
     await message.answer(
-        text=All_Text.graph_request[counter]
+        text=All_Text.graph_request[0]
     )
 
-    counter += 1
     make_graph_flag = True
 
 
-@router.message(F.text)
 async def create_graph(message: types.Message):
     global make_graph_flag, counter, request_data
+    
     
     if counter < 4:
         await message.answer(
@@ -63,7 +62,7 @@ async def create_graph(message: types.Message):
 
 
         make_graph_flag = False
-        counter = 0
+        counter = 1
         request_data = []
 
 
