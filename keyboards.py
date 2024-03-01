@@ -1,6 +1,8 @@
 from aiogram import types
 from all_text import All_Text
 
+import config
+
 
 keyboards = {
     "start_keyboard" : [
@@ -14,11 +16,7 @@ keyboards = {
         ]
     ],
 
-    "graph_kpv_keyboard" : [
-        [types.KeyboardButton(text=All_Text.button_back_to_menu)]
-    ],
-
-    "equilibrium_point_kb" : [
+    "back_keyboard" : [
         [types.KeyboardButton(text=All_Text.button_back_to_menu)]
     ],
 
@@ -34,8 +32,28 @@ keyboards = {
         [
             types.KeyboardButton(text=All_Text.button_back_to_menu)
         ]
+    ],
+
+    "settings_keyboard" : [
+        [
+            types.KeyboardButton(text=All_Text.button_switch_solution['ep'][config.solution_ep_flag])
+        ],
+        [
+            types.KeyboardButton(text=All_Text.button_back_to_menu)
+        ]
     ]
 }
+
+
+def update_settings_keyboard():
+    keyboards["settings_keyboard"] =[
+        [
+            types.KeyboardButton(text=All_Text.button_switch_solution['ep'][config.solution_ep_flag])
+        ],
+        [
+            types.KeyboardButton(text=All_Text.button_back_to_menu)
+        ]
+    ]
 
 
 def create_keyboard(keyboard_name: str) -> types.ReplyKeyboardMarkup:

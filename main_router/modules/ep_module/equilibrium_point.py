@@ -3,28 +3,33 @@ from aiogram import F, Router, types
 from all_text import All_Text
 from keyboards import create_keyboard
 
+import config
+
 router = Router(name=__name__)
 
-
-calculate_ep_flag = False
 coefficients = []
 request_counter = 1
 
 @router.message(F.text == All_Text.button_equilibrium_point)
-async def find_quilibrium_point(message: types.Message):
-    global calculate_ep_flag
+async def find_quilibrium_point(message: types.Message) -> None:
+
+    text = f"""
+Рассчет точки рыночного равновесия
+Показывать рещение: {All_Text.emoji["e_condiction"][config.solution_ep_flag]}
+"""
 
     await message.answer(
-        text="Рассчет точки рыночного равновесия",
-        reply_markup=create_keyboard("equilibrium_point_kb")        
+        text=text,
+        reply_markup=create_keyboard("back_keyboard")        
     )
 
     await message.answer(text=All_Text.ep_request[0])
 
-    calculate_ep_flag = True
+    config.calculate_ep_flag = True
 
-async def calculate_ep(message: types.Message):
-    global coefficients, request_counter, calculate_ep_flag
+
+async def calculate_ep(message: types.Message) -> None:
+    global coefficients, request_counter
 
     if request_counter < 4:
         await message.answer(text=All_Text.ep_request[request_counter])
@@ -37,13 +42,20 @@ async def calculate_ep(message: types.Message):
         
         A = coefficients[0]; B = coefficients[1]; C = coefficients[2]; D = coefficients[3]
 
-        P = (C + B)/(A + D)
+        P = round((C + B)/(A + D), 2)
 
-        Q = A*P - B
+        Q = round((A*P - B), 2)
 
-        await message.answer(text=f"Равновесная цена: {round(P, 2)}; Равновесный объем: {round(Q, 2)}")
+        if config.solution_ep_flag:
+            text = All_Text()
+            await message.answer(
+                text=text.create_solution_ep_text(A, B, C, D, P, Q)
+            )
+        await message.answer(
+            text=f"Итого: равновесная цена равна {round(P, 2)} ден.ед., а равновесный объем равен {round(Q, 2)} ед."
+        )
 
-        calculate_ep_flag = False
+        config.calculate_ep_flag = False
         request_counter = 1
         coefficients = []
 

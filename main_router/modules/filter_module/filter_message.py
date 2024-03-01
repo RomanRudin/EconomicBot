@@ -2,9 +2,11 @@ from aiogram import Router, F, types
 from random import randint
 
 from all_text import All_Text
-from main_router.modules.help_module import help
-from main_router.modules.graph_module import graph
-from main_router.modules.ep_module import equilibrium_point as ep
+from main_router.modules.help_module.help import info_message
+from main_router.modules.graph_module.graph import create_graph
+from main_router.modules.ep_module.equilibrium_point import calculate_ep
+
+import config
 
 router = Router(name=__name__)
 
@@ -47,15 +49,17 @@ async def non_text_react(message: types.Message):
     await message.answer(All_Text.incorrect_message_text)
 
 
-@router.message(~F.text.endswith('.'))
+@router.message(~F.text.endswith('.') & ~F.text.startwith('/'))
 async def text_react(message: types.Message):
 
-    if help.help_flag and message.text in "1234":
+    if config.help_flag and message.text in "1234":
         id_mes = int(message.text)
         if 1 <= id_mes <= 4:
-            await help.info_message(message, id_mes)
+            await info_message(message, id_mes)
+        else:
+            await message.answer(All_Text.incorrect_data_text)
 
-    elif graph.make_graph_flag:
+    elif config.make_graph_flag or config.calculate_ep_flag:
         if message.text[0] == "-":
             await message.answer(All_Text.incorrect_negative_num_text)
             await message.answer(All_Text.correct_data_example)
@@ -63,27 +67,15 @@ async def text_react(message: types.Message):
         elif message.text[0] in "0123456789":
             try:
                 int(message.text)
-                await graph.create_graph(message)
-            except ValueError:
+                if config.make_graph_flag:
+                    await create_graph(message)
+                else:
+                    await calculate_ep(message)
+            except:
                 await message.answer(All_Text.incorrect_num_text)
                 await message.answer(All_Text.correct_data_example)
-
-    elif ep.calculate_ep_flag:
-        if message.text[0] == "-":
-            await message.answer(All_Text.incorrect_negative_num_text)
-            await message.answer(All_Text.correct_data_example)
-
-        elif message.text[0] in "0123456789":
-            try:
-                float(message.text)
-                await ep.calculate_ep(message)
-            except ValueError:
-                await message.answer(All_Text.incorrect_num_text)
-                await message.answer(All_Text.correct_data_example)
-    
-    elif graph.make_graph_flag or help.help_flag or ep.calculate_ep_flag:
-        await message.answer(All_Text.incorrect_data_text)
-        if graph.make_graph_flag:
+        else:
+            await message.answer(All_Text.incorrect_data_text)
             await message.answer(All_Text.correct_data_example)
 
     else:
