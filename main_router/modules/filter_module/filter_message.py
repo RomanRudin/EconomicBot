@@ -5,6 +5,7 @@ from all_text import All_Text
 from main_router.modules.help_module.help import info_message
 from main_router.modules.graph_module.graph import create_graph
 from main_router.modules.ep_module.equilibrium_point import calculate_ep
+from main_router.modules.def_surp_module.deficit_and_surplus import determine_def_surp
 
 import config
 
@@ -46,6 +47,7 @@ async def voice_react(message: types.Message):
 
 @router.message(~F.text)
 async def non_text_react(message: types.Message):
+    
     await message.answer(All_Text.incorrect_message_text)
 
 
@@ -59,21 +61,28 @@ async def text_react(message: types.Message):
         else:
             await message.answer(All_Text.incorrect_data_text)
 
-    elif config.make_graph_flag or config.calculate_ep_flag:
-        if message.text[0] == "-":
+    elif config.make_graph_flag or config.calculate_ep_flag or config.determine_def_surp_flag:
+        
+        if message.text[0] == "-" and config.make_graph_flag:
             await message.answer(All_Text.incorrect_negative_num_text)
             await message.answer(All_Text.correct_data_example)
 
-        elif message.text[0] in "0123456789":
+        elif message.text[0] in "0123456789" or message.text[1] in "0123456789":
             try:
-                int(message.text)
-                if config.make_graph_flag:
-                    await create_graph(message)
+                float(message.text)
+                if float(message.text) == 0:
+                    await message.answer(text=All_Text.incorrect_zero_message_text)
                 else:
-                    await calculate_ep(message)
+                    if config.make_graph_flag:
+                        await create_graph(message)
+                    elif config.calculate_ep_flag:
+                        await calculate_ep(message)
+                    else:
+                        await determine_def_surp(message)
             except:
                 await message.answer(All_Text.incorrect_num_text)
                 await message.answer(All_Text.correct_data_example)
+                
         else:
             await message.answer(All_Text.incorrect_data_text)
             await message.answer(All_Text.correct_data_example)

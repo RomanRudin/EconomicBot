@@ -10,6 +10,7 @@ router = Router(name=__name__)
 coefficients = []
 request_counter = 1
 
+
 @router.message(F.text == All_Text.button_equilibrium_point)
 async def find_quilibrium_point(message: types.Message) -> None:
 
@@ -35,12 +36,13 @@ async def calculate_ep(message: types.Message) -> None:
         await message.answer(text=All_Text.ep_request[request_counter])
         request_counter += 1
 
-    arg = float(message.text)
+    arg = int(float(message.text)) if int(float(message.text)) == float(message.text) else float(message.text)
     coefficients.append(arg)
 
     if len(coefficients) == 4:
         
-        A = coefficients[0]; B = coefficients[1]; C = coefficients[2]; D = coefficients[3]
+        A = coefficients[0]; B = coefficients[1]
+        C = coefficients[2]; D = coefficients[3]
 
         P = round((C + B)/(A + D), 2)
 
@@ -51,16 +53,27 @@ async def calculate_ep(message: types.Message) -> None:
             await message.answer(
                 text=text.create_solution_ep_text(A, B, C, D, P, Q)
             )
-        await message.answer(
-            text=f"Итого: равновесная цена равна {round(P, 2)} ден.ед., а равновесный объем равен {round(Q, 2)} ед."
-        )
+            if Q < 0:
+                await message.answer(
+                    text=f"При заданных коэффициентах равновесный объем Q меньше нуля. \nПрошу, попробуйте ввести другие коэффициенты.",
+                    reply_markup=create_keyboard("start_keyboard")
+                )
+            elif P < 0:
+                await message.answer(
+                    text=f"При заданных коэффициентах равновесный цена P меньше нуля. \nПрошу, попробуйте ввести другие коэффициенты.",
+                    reply_markup=create_keyboard("start_keyboard")
+                )
+            else:
+                await message.answer(
+                    text=f"Итого: равновесная цена равна {round(P, 2)} ден.ед., а равновесный объем равен {round(Q, 2)} ед."
+                )
+                await message.answer(
+                    text="Что-нибудь еще?",
+                    reply_markup=create_keyboard("start_keyboard")
+                )
 
         config.calculate_ep_flag = False
         request_counter = 1
         coefficients = []
 
-        await message.answer(
-            text="Что-нибудь еще?",
-            reply_markup=create_keyboard("start_keyboard")
-        )
 

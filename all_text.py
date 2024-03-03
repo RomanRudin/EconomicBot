@@ -96,13 +96,17 @@ Qs = C - D*P (функция предложения)
     solution_flag_text = f"""
 {emoji['e_gear']}Настройки{emoji['e_gear']}
 Показывать решение для расчета ТРР: {emoji['e_condiction'][config.solution_ep_flag]}
+Показывать решение для определения ДиИ: {emoji['e_condiction'][config.solution_def_surp_flag]}
 """
 
+
+    # solution text
     # update solution text func 
-    def update_solution_text(self, solution_ep_flag_id):
+    def update_solution_text(self, solution_ep_flag_id, solution_def_surp_flag_id):
         self.solution_flag_text = f"""
 {self.emoji['e_gear']}Настройки{self.emoji['e_gear']}
 Показывать решение для расчета ТРР: {self.emoji['e_condiction'][solution_ep_flag_id]}
+Показывать решение для определения ДиИ: {self.emoji['e_condiction'][solution_def_surp_flag_id]}
 """
 
 
@@ -111,22 +115,67 @@ Qs = C - D*P (функция предложения)
         text = f"""
 Функции спроса и предложения задаются следующими функциями:
 
-Qd = ({A})P - {B} (функция спроса)
-Qs = {C} - ({D})P (функция предложения)
+Qd = {A}*P {'-' if B > 0 else '+'} {abs(B)} (функция спроса)
+Qs = {C} {'-' if D > 0 else '+'} {abs(D)}*P (функция предложения)
 
 Для нахождения ТРР, то есть параметров равновесия, приравняем функцию спроса к функции предложения:
 
 Qd = Qs
-({A})P - {B} = {C} - ({D})P
-({A + D})P = {C + B}
+{A}*P {'-' if B > 0 else '+'} {abs(B)} = {C} {'-' if D > 0 else '+'} {abs(D)}*P
+{A + D}*P = {round(C + B, 2)}
 
 P = {P} - равновесная стоимость
 
 Чтобы найти равновесный объем, подставим равновесную стоимость в любую из функций сроса или предложения:
 
-Q = {A}*{P} - {B}
+Q = {A}*{P} {'-' if B > 0 else '+'} {abs(B)}
 
 Q = {Q}
+"""
+        return text
+
+
+    # func for create solution text for deficit and surplus
+    def create_solution_def_surp_text(self, A: float, B: float, C: float, D: float, E: float, P: float, Qd: float, Qs: float, Q: float, condition: str) -> str:
+        support_comparison_text = "P = E" if condition == "равновесия" else f"""
+P {'>' if condition == "дефицита" else '<'} E
+
+Значит на рынке будет ситуация {condition}.
+
+Расчитаем размер {condition}.
+
+Qd = {A}*{E} {'-' if B > 0 else '+'} {abs(B)}
+Qs = {C} {'-' if D > 0 else '+'} {abs(D)}*{E}
+
+Отсюда:
+
+Q = {'Qd - Qs' if condition == 'дефицита' else 'Qs - Qd'}
+
+Q = {Qd if condition == 'дефицита' else Qs} - {Qs if condition == 'дефицита' else Qd}
+
+Q = {Q}
+
+"""
+        
+        text = f"""
+Функции спроса и предложения задаются следующими функциями:
+
+Qd = {A}*P {'-' if B > 0 else '+'} {abs(B)} (функция спроса)
+Qs = {C} {'-' if D > 0 else '+'} {abs(D)}*P (функция предложения)
+
+Для определения дефицита/излишка, найдем ТРР.
+Для этого приравняем функцию спроса к функции предложения:
+
+Qd = Qs
+{A}*P {'-' if B > 0 else '+'} {abs(B)} = {C} {'-' if D > 0 else '+'} {abs(D)}*P
+{A + D}*P = {round(C + B, 2)}
+
+P = {P} - равновесная стоимость
+
+Далее сравним равновесную цену P с заданной ценой товара E:
+
+{support_comparison_text}
+
 """
         return text
 
@@ -144,8 +193,15 @@ Q = {Q}
         "Введите коэффициент A",
         "Введите коэффициент B",
         "Введите коэффициент C",
+        "Введите коэффициент D"
+    ]
+    # deficite and surplus
+    def_surp_request = [
+        "Введите коэффициент A",
+        "Введите коэффициент B",
+        "Введите коэффициент C",
         "Введите коэффициент D",
-        "Вывести решение?"
+        "Введите уровень цены Е"
     ]
     
 
@@ -154,6 +210,7 @@ Q = {Q}
     incorrect_data_text = "Простите, но кажется, Вы ввели неверные данные"
     incorrect_num_text = "Прошу вводить только числа"
     incorrect_negative_num_text = "Прошу вводить положительные числа"
+    incorrect_zero_message_text = "Прошу вводить числа больше нуля"
 
     incorrect_command = """
 Хотел бы я поболтать, но нужно заняться делом!
@@ -166,6 +223,7 @@ Q = {Q}
     # buttons text
     button_graph = 'Построить общую КПВ.'
     button_equilibrium_point = 'Найти ТРР.'
+    button_deficit_and_surplus = 'Определить дефицит/излишек.'
     
     button_back_to_menu = 'Вернуться на главную.'
     
@@ -173,6 +231,11 @@ Q = {Q}
         "ep" : [
             'Включить решение ТРР',
             'Выключить решение ТРР'
+        ],
+        
+        "def_surp" : [
+            'Включить решение ДиИ',
+            'Выключить решение ДиИ'
         ]
     }
 

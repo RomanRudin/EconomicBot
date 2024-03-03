@@ -8,6 +8,7 @@ from .ep_module       import router as equilibrium_router
 from .settings_module import router as settings_router
 from .back_module     import router as back_router
 from .commad_module   import router as command_router
+from .def_surp_module import router as def_surp_router
 
 router = Router(name=__name__)
 
@@ -18,4 +19,5 @@ router.include_router(command_router)
 router.include_router(help_router)
 router.include_router(graph_router)
 router.include_router(equilibrium_router)
+router.include_router(def_surp_router)
 router.include_router(fiter_router)

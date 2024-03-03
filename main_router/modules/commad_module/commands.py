@@ -5,6 +5,7 @@ from os import system
 from all_text import All_Text
 from main_router.modules.graph_module import graph
 from main_router.modules.ep_module import equilibrium_point as ep
+from main_router.modules.def_surp_module import deficit_and_surplus as def_surp
 from keyboards import create_keyboard
 
 import config
@@ -25,6 +26,8 @@ def reset_data():
 
     config.settings_flag = False
 
+    config.determine_def_surp_flag = False
+
 
 async def send_date():
 
@@ -38,13 +41,19 @@ async def send_date():
     print(f"{'-'*10}equilibrium point{'-'*10}")
     print(f"counter: {ep.request_counter}")
     print(f"coefficients: {ep.coefficients}")
+    
+    print(f"{'-'*10}deficit and surplus{'-'*10}")
+    print(f"counter: {def_surp.request_counter}")
+    print(f"coefficients: {def_surp.coefficients}")
 
-    print(f"{'-'*10}flags{'-'*10}")
-    print(F"calculate_ep_flag:-{config.calculate_ep_flag}")
-    print(F"help_flag:---------{config.help_flag}")
-    print(F"make_graph_flag:---{config.make_graph_flag}")
-    print(F"settings_flag:-----{config.settings_flag}")
-    print(F"solution_ep_flag:--{config.solution_ep_flag}")
+    print(f"{'-'*13}flags{'-'*13}")
+    print(F"calculate_ep_flag:--------{config.calculate_ep_flag}")
+    print(F"make_graph_flag:----------{config.make_graph_flag}")
+    print(F"determine_def_surp_flag:--{config.determine_def_surp_flag}")
+    print(F"help_flag:----------------{config.help_flag}")
+    print(F"settings_flag:------------{config.settings_flag}")
+    print(F"solution_ep_flag:---------{config.solution_ep_flag}")
+    print(F"solution_def_surp_flag:---{config.solution_def_surp_flag}")
 
 
 
@@ -85,7 +94,7 @@ async def settings(message: types.Message):
     config.settings_flag = True
 
     text = All_Text()
-    text.update_solution_text(config.solution_ep_flag)
+    text.update_solution_text(config.solution_ep_flag, config.solution_def_surp_flag)
 
     await message.answer(
         text=text.solution_flag_text,

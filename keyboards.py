@@ -11,7 +11,7 @@ keyboards = {
             types.KeyboardButton(text=All_Text.button_equilibrium_point),
         ],
         [
-            types.KeyboardButton(text=All_Text.button_indev),
+            types.KeyboardButton(text=All_Text.button_deficit_and_surplus),
             types.KeyboardButton(text=All_Text.button_indev),
         ]
     ],
@@ -36,7 +36,8 @@ keyboards = {
 
     "settings_keyboard" : [
         [
-            types.KeyboardButton(text=All_Text.button_switch_solution['ep'][config.solution_ep_flag])
+            types.KeyboardButton(text=All_Text.button_switch_solution['ep'][config.solution_ep_flag]),
+            types.KeyboardButton(text=All_Text.button_switch_solution['def_surp'][config.solution_def_surp_flag])
         ],
         [
             types.KeyboardButton(text=All_Text.button_back_to_menu)
@@ -48,7 +49,8 @@ keyboards = {
 def update_settings_keyboard():
     keyboards["settings_keyboard"] =[
         [
-            types.KeyboardButton(text=All_Text.button_switch_solution['ep'][config.solution_ep_flag])
+            types.KeyboardButton(text=All_Text.button_switch_solution['ep'][config.solution_ep_flag]),
+            types.KeyboardButton(text=All_Text.button_switch_solution['def_surp'][config.solution_def_surp_flag])
         ],
         [
             types.KeyboardButton(text=All_Text.button_back_to_menu)
