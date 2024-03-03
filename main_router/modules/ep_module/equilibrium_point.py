@@ -53,24 +53,24 @@ async def calculate_ep(message: types.Message) -> None:
             await message.answer(
                 text=text.create_solution_ep_text(A, B, C, D, P, Q)
             )
-            if Q < 0:
-                await message.answer(
-                    text=f"При заданных коэффициентах равновесный объем Q меньше нуля. \nПрошу, попробуйте ввести другие коэффициенты.",
-                    reply_markup=create_keyboard("start_keyboard")
-                )
-            elif P < 0:
-                await message.answer(
-                    text=f"При заданных коэффициентах равновесный цена P меньше нуля. \nПрошу, попробуйте ввести другие коэффициенты.",
-                    reply_markup=create_keyboard("start_keyboard")
-                )
-            else:
-                await message.answer(
-                    text=f"Итого: равновесная цена равна {round(P, 2)} ден.ед., а равновесный объем равен {round(Q, 2)} ед."
-                )
-                await message.answer(
-                    text="Что-нибудь еще?",
-                    reply_markup=create_keyboard("start_keyboard")
-                )
+        if Q < 0:
+            await message.answer(
+                text=f"При заданных коэффициентах равновесный объем Q меньше нуля. \nПрошу, попробуйте ввести другие коэффициенты.",
+                reply_markup=create_keyboard("start_keyboard")
+            )
+        elif P < 0:
+            await message.answer(
+                text=f"При заданных коэффициентах равновесный цена P меньше нуля. \nПрошу, попробуйте ввести другие коэффициенты.",
+                reply_markup=create_keyboard("start_keyboard")
+            )
+        else:
+            await message.answer(
+                text=f"Итого: равновесная цена равна {round(P, 2)} ден.ед., а равновесный объем равен {round(Q, 2)} ед."
+            )
+            await message.answer(
+                text="Что-нибудь еще?",
+                reply_markup=create_keyboard("start_keyboard")
+            )
 
         config.calculate_ep_flag = False
         request_counter = 1
