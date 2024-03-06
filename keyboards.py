@@ -12,7 +12,7 @@ keyboards = {
         ],
         [
             types.KeyboardButton(text=All_Text.button_deficit_and_surplus),
-            types.KeyboardButton(text=All_Text.button_indev),
+            types.KeyboardButton(text=All_Text.button_profit),
         ]
     ],
 

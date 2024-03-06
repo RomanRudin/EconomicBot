@@ -6,6 +6,7 @@ from all_text import All_Text
 from main_router.modules.graph_module import graph
 from main_router.modules.ep_module import equilibrium_point as ep
 from main_router.modules.def_surp_module import deficit_and_surplus as def_surp
+from main_router.modules.profit_module import profit
 from keyboards import create_keyboard
 
 import config
@@ -24,10 +25,19 @@ def reset_data():
     ep.coefficients = []
     config.calculate_ep_flag = False
 
+    profit.request_counter = 1
+    profit.coefficients = []
+    config.calculate_profit_flag = False
+    config.profit_vc_flag = False
+    config.profit_fc_flag = False
+
+    config.calculate_profit_flag = False
+
     config.settings_flag = False
 
     config.determine_def_surp_flag = False
 
+    
 
 async def send_date():
 
@@ -46,14 +56,21 @@ async def send_date():
     print(f"counter: {def_surp.request_counter}")
     print(f"coefficients: {def_surp.coefficients}")
 
+    print(f"{'-'*10}profit{'-'*10}")
+    print(f"counter: {profit.request_counter}")
+    print(f"coefficients: {profit.coefficients}")
+
     print(f"{'-'*13}flags{'-'*13}")
-    print(F"calculate_ep_flag:--------{config.calculate_ep_flag}")
-    print(F"make_graph_flag:----------{config.make_graph_flag}")
-    print(F"determine_def_surp_flag:--{config.determine_def_surp_flag}")
-    print(F"help_flag:----------------{config.help_flag}")
-    print(F"settings_flag:------------{config.settings_flag}")
-    print(F"solution_ep_flag:---------{config.solution_ep_flag}")
-    print(F"solution_def_surp_flag:---{config.solution_def_surp_flag}")
+    print(f"calculate_ep_flag:--------{config.calculate_ep_flag}")
+    print(f"make_graph_flag:----------{config.make_graph_flag}")
+    print(f"determine_def_surp_flag:--{config.determine_def_surp_flag}")
+    print(f"profit_flag---------------{config.calculate_profit_flag}")
+    print(f"profit_vc_flag------------{config.profit_vc_flag}")
+    print(f"profit_fc_flag------------{config.profit_fc_flag}")
+    print(f"help_flag:----------------{config.help_flag}")
+    print(f"settings_flag:------------{config.settings_flag}")
+    print(f"solution_ep_flag:---------{config.solution_ep_flag}")
+    print(f"solution_def_surp_flag:---{config.solution_def_surp_flag}")
 
 
 
@@ -61,7 +78,7 @@ async def send_date():
 async def handle_start(message: types.Message):
 
     await message.answer(
-        text=f"Приветствую, {message.from_user.full_name}{All_Text.emoji['e_hello']}" + All_Text.start_main_text,
+        text=(f"Приветствую, {message.from_user.full_name}{All_Text.emoji['e_hello']}" + All_Text.start_main_text),
         reply_markup=create_keyboard(keyboard_name="start_keyboard")
     )
     await message.answer(text=All_Text.second_start_main_text)
@@ -81,7 +98,7 @@ async def help(message: types.Message):
 
 
 @router.message(Command("data"))
-async def help(message: types.Message):
+async def data(message: types.Message):
     await send_date()
     await message.delete()
 

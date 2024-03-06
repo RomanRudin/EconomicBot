@@ -1,5 +1,3 @@
-__all__ = ("router", )
-
 from aiogram import Router
 
 from .help import router as help_router

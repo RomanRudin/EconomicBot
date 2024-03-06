@@ -4,10 +4,12 @@ from random import randint
 from all_text import All_Text
 from main_router.modules.help_module.help import info_message
 from main_router.modules.graph_module.graph import create_graph
+from main_router.modules.profit_module.profit import get_request, create_data_list
 from main_router.modules.ep_module.equilibrium_point import calculate_ep
 from main_router.modules.def_surp_module.deficit_and_surplus import determine_def_surp
 
 import config
+import traceback
 
 router = Router(name=__name__)
 
@@ -47,45 +49,72 @@ async def voice_react(message: types.Message):
 
 @router.message(~F.text)
 async def non_text_react(message: types.Message):
-    
     await message.answer(All_Text.incorrect_message_text)
 
 
-@router.message(~F.text.endswith('.') & ~F.text.startwith('/'))
+@router.message(~F.text.endswith('.'))
 async def text_react(message: types.Message):
 
     if config.help_flag and message.text in "1234":
         id_mes = int(message.text)
         if 1 <= id_mes <= 4:
             await info_message(message, id_mes)
-        else:
-            await message.answer(All_Text.incorrect_data_text)
+        else:            
+            await message.answer(All_Text.incorrect_num_text)
 
-    elif config.make_graph_flag or config.calculate_ep_flag or config.determine_def_surp_flag:
+
+    elif config.settings_flag:
+        await message.answer(text=All_Text.incorrect_settings_data_text)
+
+
+    elif config.make_graph_flag or config.calculate_ep_flag or \
+        config.determine_def_surp_flag:
         
-        if message.text[0] == "-" and config.make_graph_flag:
-            await message.answer(All_Text.incorrect_negative_num_text)
-            await message.answer(All_Text.correct_data_example)
+        try:
+            num = float(message.text)
+            
+            if num == 0:
+                await message.answer(text=All_Text.incorrect_zero_message_text)
+                await message.answer(All_Text.correct_data_example)
 
-        elif message.text[0] in "0123456789" or message.text[1] in "0123456789":
-            try:
-                float(message.text)
-                if float(message.text) == 0:
-                    await message.answer(text=All_Text.incorrect_zero_message_text)
+            elif config.make_graph_flag:
+                if num < 0:
+                    await message.answer(All_Text.incorrect_negative_num_text)
+                    await message.answer(All_Text.correct_data_example)
                 else:
-                    if config.make_graph_flag:
-                        await create_graph(message)
-                    elif config.calculate_ep_flag:
-                        await calculate_ep(message)
-                    else:
-                        await determine_def_surp(message)
+                    await create_graph(message)
+                
+            elif config.calculate_ep_flag:
+                await calculate_ep(message)
+            
+            elif config.determine_def_surp_flag:
+                await determine_def_surp(message)
+
+        except:
+            await message.answer(All_Text.incorrect_num_text)
+            await message.answer(All_Text.correct_data_example)
+            traceback.print_exc()
+
+    elif config.calculate_profit_flag:
+
+        if not (config.profit_fc_flag or config.profit_vc_flag):
+            try:
+                int(message.text)            
+                await get_request(message)
+            
             except:
                 await message.answer(All_Text.incorrect_num_text)
                 await message.answer(All_Text.correct_data_example)
                 
+
+        elif config.profit_fc_flag and create_data_list(text_message=message.text, check=True):
+            await get_request(message)
+
+        elif config.profit_vc_flag and create_data_list(text_message=message.text, check=True):
+            await get_request(message)
+
         else:
-            await message.answer(All_Text.incorrect_data_text)
-            await message.answer(All_Text.correct_data_example)
+            await message.answer(text=All_Text.incorrect_negative_num_text)
 
     else:
         await message.answer(All_Text.incorrect_command)

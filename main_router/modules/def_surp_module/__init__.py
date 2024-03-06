@@ -1,5 +1,3 @@
-__all__ = ("router", )
-
 from aiogram import Router
 
 from .deficit_and_surplus import router as def_surp_router

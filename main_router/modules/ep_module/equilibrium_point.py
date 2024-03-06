@@ -41,8 +41,10 @@ async def calculate_ep(message: types.Message) -> None:
 
     if len(coefficients) == 4:
         
-        A = coefficients[0]; B = coefficients[1]
-        C = coefficients[2]; D = coefficients[3]
+        A = coefficients[0]
+        B = coefficients[1]
+        C = coefficients[2]
+        D = coefficients[3]
 
         P = round((C + B)/(A + D), 2)
 

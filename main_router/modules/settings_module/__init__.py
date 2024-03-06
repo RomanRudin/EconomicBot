@@ -1,5 +1,3 @@
-__all__ = ("router", )
-
 from aiogram import Router
 
 from .settings import router as set_router

@@ -1,5 +1,3 @@
-__all__ = ("router", )
-
 from aiogram import Router
 
 from .equilibrium_point import router as ep_router

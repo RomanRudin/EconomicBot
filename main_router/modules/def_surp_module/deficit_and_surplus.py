@@ -41,8 +41,10 @@ async def determine_def_surp(message: types.Message) -> None:
 
     if len(coefficients) == 5:
         
-        A = coefficients[0]; B = coefficients[1]
-        C = coefficients[2]; D = coefficients[3]; 
+        A = coefficients[0]
+        B = coefficients[1]
+        C = coefficients[2]
+        D = coefficients[3]
         E = coefficients[4]
 
         P = round((C + B)/(A + D), 2)
