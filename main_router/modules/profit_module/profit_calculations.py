@@ -1,12 +1,14 @@
 import all_text
 
-def create_data_list(text_message: str, check: bool = False) -> list | bool:
+def create_data_list(text_message: str, check: bool = False) -> list | tuple:
     
     data_list = []
     data_value = ""
+    correct = False
+    incorrect_text = ""
         
     if text_message == "0" or text_message == all_text.button_none_costs:
-        if check: return True
+        if check: return True, incorrect_text
         return 0
 
     if text_message.endswith(";"): text_message = text_message[:-1] 
@@ -26,31 +28,35 @@ def create_data_list(text_message: str, check: bool = False) -> list | bool:
 
     list_costs = []
 
-    correct = False
+    if len(data_list) < 6:
+        for data in data_list:
 
-    for data in data_list:
+            separator_id = data.find(",")
 
-        separator_id = data.find(",")
+            text_costs = data[:separator_id].replace(" ", "ъъъъ")
+            if text_costs.startswith("ъъъъ"):
+                text_costs = text_costs.replace("ъъъъ", "", 1)
+            value_costs = data[separator_id+1:].replace(" ", "")
 
-        text_costs = data[:separator_id].replace(" ", "ъъъъ")
-        if text_costs.startswith("ъъъъ"):
-            text_costs = text_costs.replace("ъъъъ", "", 1)
-        value_costs = data[separator_id+1:].replace(" ", "")
+            correct = False
+            if  (all(map(str.isalpha, text_costs)) and text_costs != "") and \
+                        all(map(str.isdigit, value_costs)):
+                correct = True
 
+            try:
+                list_costs.append((text_costs.replace("ъъъъ", " "), int(value_costs)))
+            except:
+                correct = False
+                incorrect_text = all_text.incorrect_profit_data_text
+    else:
         correct = False
-        if  (all(map(str.isalpha, text_costs)) and text_costs != "") and \
-                    all(map(str.isdigit, value_costs)):
-            correct = True
-
-        list_costs.append((text_costs.replace("ъъъъ", " "), int(value_costs)))
-
-    print(f"correct: {correct}")
+        incorrect_text = all_text.incorrect_profit_num_data_text
 
     if check:
         if correct:
-            return True
+            return True, incorrect_text
         else:
-            return False
+            return False, incorrect_text
             
     return list_costs
 
@@ -58,49 +64,43 @@ def create_data_list(text_message: str, check: bool = False) -> list | bool:
 
 def calculate_profit(coefficients: list) -> str:
 
-    Q = coefficients[0]
-    P = coefficients[1]
-    FC_list = coefficients[2]
-    VC_list = coefficients[3]
+    q = coefficients[0]
+    p = coefficients[1]
+    fc_list = coefficients[2]
+    vc_list = coefficients[3]
 
-    FC = 0
-    VC = 0
+    fc = 0
+    vc = 0
 
-    FC_text = ""
-    VC_text = ""
+    fc_text = ""
+    vc_text = ""
 
-    if FC_list:
-        FC_text += "\n(включая: " 
-        for el in FC_list:
-            FC += el[1]
-            FC_text += f"{el[0]} ({el[1]} руб./единицу товара)"
-            if el != FC_list[-1]:
-                FC_text += ", \n"
-        FC_text += ")"
+    if fc_list:
+        fc_text += "\n(включая: " 
+        for el in fc_list:
+            fc += el[1]
+            fc_text += f"{el[0]} ({el[1]} руб./единицу товара)"
+            if el != fc_list[-1]:
+                fc_text += ", \n"
+        fc_text += ")"
 
 
-    if VC_list:
-        VC_text += "\n(включая: " 
-        for el in VC_list:
-            VC += el[1]
-            VC_text += f"{el[0]} ({el[1]} руб./единицу товара)"
-            if el != VC_list[-1]:
-                VC_text += ", \n" 
-        VC_text += ")"
+    if vc_list:
+        vc_text += "\n(включая: " 
+        for el in vc_list:
+            vc += el[1]
+            vc_text += f"{el[0]} ({el[1]} руб./единицу товара)"
+            if el != vc_list[-1]:
+                vc_text += ", \n" 
+        vc_text += ")"
 
-    R = Q*P
+    r = q*p
 
-    C = Q*VC + FC
+    c = q*vc + fc
 
-    profit = R - C
+    profit = r - c
 
     result_text = "прибыль" if profit > 0 else "убыток"
 
-    return f"""
-При реализации {Q} единиц продукции 
-по {P} руб. за единицу товара и уровне 
-переменных издержек в {VC} руб./единицу товара {VC_text}
-и постоянных издержек в {FC} руб. {FC_text},
-{result_text} составит: {abs(profit)} руб.
-"""
-
+    return all_text.create_answer_profit_text(q, p, vc, fc, profit,
+                                              vc_text, fc_text, result_text)

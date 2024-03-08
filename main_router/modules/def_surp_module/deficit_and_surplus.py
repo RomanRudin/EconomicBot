@@ -59,6 +59,9 @@ async def determine_def_surp(message: types.Message) -> None:
         Qd = A*E - B
         Qs = C - D*E
 
+        if Qd < 0: Qd = 0
+        if Qs < 0: Qs = 0
+
         Q = abs(Qd - Qs) 
 
         if config.solution_def_surp_flag:
