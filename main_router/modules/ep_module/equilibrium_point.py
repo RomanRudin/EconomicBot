@@ -1,8 +1,8 @@
 from aiogram import F, Router, types
 
-from all_text import All_Text
 from keyboards import create_keyboard
 
+import all_text
 import config
 
 router = Router(name=__name__)
@@ -11,12 +11,12 @@ coefficients = []
 request_counter = 1
 
 
-@router.message(F.text == All_Text.button_equilibrium_point)
+@router.message(F.text == all_text.button_equilibrium_point)
 async def find_quilibrium_point(message: types.Message) -> None:
 
     text = f"""
 Рассчет точки рыночного равновесия
-Показывать рещение: {All_Text.emoji["e_condiction"][config.solution_ep_flag]}
+Показывать рещение: {all_text.emoji["e_condiction"][config.solution_ep_flag]}
 """
 
     await message.answer(
@@ -24,7 +24,7 @@ async def find_quilibrium_point(message: types.Message) -> None:
         reply_markup=create_keyboard("back_keyboard")        
     )
 
-    await message.answer(text=All_Text.ep_request[0])
+    await message.answer(text=all_text.ep_request[0])
 
     config.calculate_ep_flag = True
 
@@ -33,7 +33,7 @@ async def calculate_ep(message: types.Message) -> None:
     global coefficients, request_counter
 
     if request_counter < 4:
-        await message.answer(text=All_Text.ep_request[request_counter])
+        await message.answer(text=all_text.ep_request[request_counter])
         request_counter += 1
 
     arg = int(float(message.text)) if int(float(message.text)) == float(message.text) else float(message.text)
@@ -51,9 +51,8 @@ async def calculate_ep(message: types.Message) -> None:
         Q = round((A*P - B), 2)
 
         if config.solution_ep_flag:
-            text = All_Text()
             await message.answer(
-                text=text.create_solution_ep_text(A, B, C, D, P, Q)
+                text=all_text.create_solution_ep_text(A, B, C, D, P, Q)
             )
         if Q < 0:
             await message.answer(

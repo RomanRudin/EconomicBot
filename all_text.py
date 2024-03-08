@@ -3,25 +3,23 @@ from emoji import emojize
 
 import config
 
-class All_Text:
-
-    # emoji dict
-    emoji = {
-        "e_hello" : emojize(":waving_hand:"),
-        "e_gear" : emojize(":gear:"),
-        "e_condiction" : [
-            emojize(":cross_mark:"),
-            emojize(":check_mark_button:")
-        ]
-    }
+# emoji dict
+emoji = {
+    "e_hello" : emojize(":waving_hand:"),
+    "e_gear" : emojize(":gear:"),
+    "e_condiction" : [
+        emojize(":cross_mark:"),
+        emojize(":check_mark_button:")
+    ]
+}
 
 
-    # keyboard text
-    keyboard_text_start = "Что вы хотите сделать?"
+# keyboard text
+keyboard_text_start = "Что вы хотите сделать?"
 
 
-    # start text
-    start_main_text = """
+# start text
+start_main_text = """
 
 Я ваш помочник с экономическими задачами Аркадий!
 
@@ -33,11 +31,11 @@ class All_Text:
 
 Если у Вас есть вопросы, введите /help, и я постараюсь вам помочь
 """
-    second_start_main_text = "Что вы хотите сделать?"
+second_start_main_text = "Что вы хотите сделать?"
 
 
-    #help text
-    help_main_text = """
+#help text
+help_main_text = """
 Возникли вопросы по командам?
 
 Я помогу вам разобраться с ними!
@@ -48,9 +46,10 @@ class All_Text:
 3 - расчет объема дефицита/излишка
 4 - расчет прибыля фирмы
 """
-    help_question_text = "Что-нибудь еще?"
 
-    help_point_text = [
+help_question_text = "Что-нибудь еще?"
+
+help_point_text = [
 
         """
 Построение графика КПВ.
@@ -91,28 +90,30 @@ Qs = C - D*P (функция предложения)
     ]
 
 
-    # settings text
-    # base solution text
-    solution_flag_text = f"""
+# settings text
+# base solution text
+solution_flag_text = f"""
 {emoji['e_gear']}Настройки{emoji['e_gear']}
 Показывать решение для расчета ТРР: {emoji['e_condiction'][config.solution_ep_flag]}
 Показывать решение для определения ДиИ: {emoji['e_condiction'][config.solution_def_surp_flag]}
 """
 
 
-    # solution text
-    # update solution text func 
-    def update_solution_text(self, solution_ep_flag_id, solution_def_surp_flag_id):
-        self.solution_flag_text = f"""
-{self.emoji['e_gear']}Настройки{self.emoji['e_gear']}
-Показывать решение для расчета ТРР: {self.emoji['e_condiction'][solution_ep_flag_id]}
-Показывать решение для определения ДиИ: {self.emoji['e_condiction'][solution_def_surp_flag_id]}
+# solution text
+# update solution text func 
+def update_solution_text(solution_ep_flag_id, solution_def_surp_flag_id):
+    global solution_flag_text
+
+    solution_flag_text = f"""
+{emoji['e_gear']}Настройки{emoji['e_gear']}
+Показывать решение для расчета ТРР: {emoji['e_condiction'][solution_ep_flag_id]}
+Показывать решение для определения ДиИ: {emoji['e_condiction'][solution_def_surp_flag_id]}
 """
 
 
-    # func for create solution text for equilibrium point
-    def create_solution_ep_text(self, A: float, B: float, C: float, D: float, P: float, Q: float) -> str:
-        text = f"""
+# func for create solution text for equilibrium point
+def create_solution_ep_text(A: float, B: float, C: float, D: float, P: float, Q: float) -> str:
+    text = f"""
 Функции спроса и предложения задаются следующими функциями:
 
 Qd = {A}*P {'-' if B > 0 else '+'} {abs(B)} (функция спроса)
@@ -132,12 +133,12 @@ Q = {A}*{P} {'-' if B > 0 else '+'} {abs(B)}
 
 Q = {Q}
 """
-        return text
+    return text
 
 
-    # func for create solution text for deficit and surplus
-    def create_solution_def_surp_text(self, A: float, B: float, C: float, D: float, E: float, P: float, Qd: float, Qs: float, Q: float, condition: str) -> str:
-        support_comparison_text = "P = E" if condition == "равновесия" else f"""
+# func for create solution text for deficit and surplus
+def create_solution_def_surp_text(A: float, B: float, C: float, D: float, E: float, P: float, Qd: float, Qs: float, Q: float, condition: str) -> str:
+    support_comparison_text = "P = E" if condition == "равновесия" else f"""
 P {'>' if condition == "дефицита" else '<'} E
 
 Значит на рынке будет ситуация {condition}.
@@ -157,7 +158,7 @@ Q = {Q}
 
 """
         
-        text = f"""
+    text = f"""
 Функции спроса и предложения задаются следующими функциями:
 
 Qd = {A}*P {'-' if B > 0 else '+'} {abs(B)} (функция спроса)
@@ -177,80 +178,80 @@ P = {P} - равновесная стоимость
 {support_comparison_text}
 
 """
-        return text
+    return text
 
 
-    # request text
-    # graph 
-    graph_request = [
-        "Введите максимальный объем производства товара А для первого производителя",
-        "Введите максимальный объем производства товара Б для первого производителя",
-        "Введите максимальный объем производства товара А для второго производителя",
-        "Введите максимальный объем производства товара Б для второго производителя"
-    ]
-    # equilibrium point
-    ep_request = [
-        "Введите коэффициент A",
-        "Введите коэффициент B",
-        "Введите коэффициент C",
-        "Введите коэффициент D"
-    ]
-    # deficite and surplus
-    def_surp_request = [
-        "Введите коэффициент A",
-        "Введите коэффициент B",
-        "Введите коэффициент C",
-        "Введите коэффициент D",
-        "Введите уровень цены Е"
-    ]
-    # profit
-    profit_request = [
-        "Введите объем производства в штуках",
-        "Введите цену в штуках (руб. за единицу товара)",
-        "Введите данные о постоянных издержках \n (название издержки - размер издержки)",
-        "Введите данные о переменных издержках \n (название издержки - размер издержки)"
-    ]
+# request text
+# graph 
+graph_request = [
+    "Введите максимальный объем производства товара А для первого производителя",
+    "Введите максимальный объем производства товара Б для первого производителя",
+    "Введите максимальный объем производства товара А для второго производителя",
+    "Введите максимальный объем производства товара Б для второго производителя"
+]
+# equilibrium point
+ep_request = [
+    "Введите коэффициент A",
+    "Введите коэффициент B",
+    "Введите коэффициент C",
+    "Введите коэффициент D"
+]
+# deficite and surplus
+def_surp_request = [
+    "Введите коэффициент A",
+    "Введите коэффициент B",
+    "Введите коэффициент C",
+    "Введите коэффициент D",
+    "Введите уровень цены Е"
+]
+# profit
+profit_request = [
+    "Введите объем производства в штуках",
+    "Введите цену в штуках (руб. за единицу товара)",
+    "Введите данные о постоянных издержках \n (название издержки - размер издержки)",
+    "Введите данные о переменных издержках \n (название издержки - размер издержки)"
+]
 
-    # filter answer text
-    incorrect_message_text = "Извините, но я не понимаю вас"
-    incorrect_settings_data_text = "Прошу использовать только приведенные ниже кнопки"
-    incorrect_num_text = "Прошу вводить только числа"
-    incorrect_negative_num_text = "Прошу вводить положительные числа"
-    incorrect_zero_message_text = "Прошу вводить числа не равные нулю"
+# filter answer text
+incorrect_message_text = "Извините, но я не понимаю вас"
+incorrect_settings_data_text = "Прошу использовать только приведенные ниже кнопки"
+incorrect_num_text = "Прошу вводить только числа"
+incorrect_negative_num_text = "Прошу вводить положительные числа"
+incorrect_zero_message_text = "Прошу вводить числа не равные нулю"
 
-    incorrect_command = """
+incorrect_command = """
 Хотел бы я поболтать, но нужно заняться делом!
 Прошу, выберите, что хотите сделать
 """
 
-    correct_data_example = f"Пример вводимых данных: {randint(20, 600)}"
+correct_data_example = f"Пример вводимых данных: {randint(20, 600)}"
 
 
-    # buttons text
-    button_graph = 'Построить общую КПВ.'
-    button_equilibrium_point = 'Найти ТРР.'
-    button_deficit_and_surplus = 'Определить дефицит/излишек.'
-    button_profit = 'Рассчитать прибыль фирмы.'
+# buttons text
+button_graph = 'Построить общую КПВ.'
+button_equilibrium_point = 'Найти ТРР.'
+button_deficit_and_surplus = 'Определить дефицит/излишек.'
+button_profit = 'Рассчитать прибыль фирмы.'
+
+button_none_costs = 'Издержек нет.'
+
+button_back_to_menu = 'Вернуться на главную.'
+
+button_switch_solution = {
+    "ep" : [
+        'Включить решение ТРР',
+        'Выключить решение ТРР'
+    ],
     
-    button_none_costs = 'И'
+    "def_surp" : [
+        'Включить решение ДиИ',
+        'Выключить решение ДиИ'
+    ]
+}
 
-    button_back_to_menu = 'Вернуться на главную.'
-    
-    button_switch_solution = {
-        "ep" : [
-            'Включить решение ТРР',
-            'Выключить решение ТРР'
-        ],
-        
-        "def_surp" : [
-            'Включить решение ДиИ',
-            'Выключить решение ДиИ'
-        ]
-    }
+button_help_1 = '1'
+button_help_2 = '2'
+button_help_3 = '3'
+button_help_4 = '4'
 
-    button_help_1 = '1'
-    button_help_2 = '2'
-    button_help_3 = '3'
-    button_help_4 = '4'
-
-    button_indev = 'Кнопка еще не готова' 
+button_indev = 'Кнопка еще не готова' 

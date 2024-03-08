@@ -1,13 +1,14 @@
 from aiogram import Router, F, types
 from random import randint
 
-from all_text import All_Text
 from main_router.modules.help_module.help import info_message
 from main_router.modules.graph_module.graph import create_graph
-from main_router.modules.profit_module.profit import get_request, create_data_list
+from main_router.modules.profit_module.profit import get_request
+from main_router.modules.profit_module.profit_calculations import create_data_list
 from main_router.modules.ep_module.equilibrium_point import calculate_ep
 from main_router.modules.def_surp_module.deficit_and_surplus import determine_def_surp
 
+import all_text
 import config
 import traceback
 
@@ -23,7 +24,6 @@ stickers =[
         types.FSInputFile("photo\stickers\sitcker6.jpg"),
         types.FSInputFile("photo\stickers\sitcker7.jpg")
     ]
-
 
 sticker_for_voice = types.FSInputFile("photo\stickers\sticker_for_voice.jpg")
 sticker_for_voice_note = types.FSInputFile("photo\stickers\\video_mes.jpg")
@@ -49,7 +49,7 @@ async def voice_react(message: types.Message):
 
 @router.message(~F.text)
 async def non_text_react(message: types.Message):
-    await message.answer(All_Text.incorrect_message_text)
+    await message.answer(all_text.incorrect_message_text)
 
 
 @router.message(~F.text.endswith('.'))
@@ -60,11 +60,11 @@ async def text_react(message: types.Message):
         if 1 <= id_mes <= 4:
             await info_message(message, id_mes)
         else:            
-            await message.answer(All_Text.incorrect_num_text)
+            await message.answer(all_text.incorrect_num_text)
 
 
     elif config.settings_flag:
-        await message.answer(text=All_Text.incorrect_settings_data_text)
+        await message.answer(text=all_text.incorrect_settings_data_text)
 
 
     elif config.make_graph_flag or config.calculate_ep_flag or \
@@ -74,13 +74,13 @@ async def text_react(message: types.Message):
             num = float(message.text)
             
             if num == 0:
-                await message.answer(text=All_Text.incorrect_zero_message_text)
-                await message.answer(All_Text.correct_data_example)
+                await message.answer(text=all_text.incorrect_zero_message_text)
+                await message.answer(all_text.correct_data_example)
 
             elif config.make_graph_flag:
                 if num < 0:
-                    await message.answer(All_Text.incorrect_negative_num_text)
-                    await message.answer(All_Text.correct_data_example)
+                    await message.answer(all_text.incorrect_negative_num_text)
+                    await message.answer(all_text.correct_data_example)
                 else:
                     await create_graph(message)
                 
@@ -91,9 +91,10 @@ async def text_react(message: types.Message):
                 await determine_def_surp(message)
 
         except:
-            await message.answer(All_Text.incorrect_num_text)
-            await message.answer(All_Text.correct_data_example)
+            await message.answer(all_text.incorrect_num_text)
+            await message.answer(all_text.correct_data_example)
             traceback.print_exc()
+
 
     elif config.calculate_profit_flag:
 
@@ -103,8 +104,8 @@ async def text_react(message: types.Message):
                 await get_request(message)
             
             except:
-                await message.answer(All_Text.incorrect_num_text)
-                await message.answer(All_Text.correct_data_example)
+                await message.answer(all_text.incorrect_num_text)
+                await message.answer(all_text.correct_data_example)
                 
 
         elif config.profit_fc_flag and create_data_list(text_message=message.text, check=True):
@@ -114,7 +115,8 @@ async def text_react(message: types.Message):
             await get_request(message)
 
         else:
-            await message.answer(text=All_Text.incorrect_negative_num_text)
+            await message.answer(text=all_text.incorrect_negative_num_text)
+
 
     else:
-        await message.answer(All_Text.incorrect_command)
+        await message.answer(all_text.incorrect_command)

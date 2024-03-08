@@ -1,9 +1,9 @@
 from aiogram import F, Router, types
 
-from all_text import All_Text
 from keyboards import create_keyboard
 from main_router.modules.graph_module.create_graph import draw_graph
 
+import all_text
 import config
 
 router = Router(name=__name__)
@@ -13,7 +13,7 @@ counter = 1
 request_data = []
 
 
-@router.message(F.text == All_Text.button_graph)
+@router.message(F.text == all_text.button_graph)
 async def change_flag(message: types.Message):
 
 
@@ -22,7 +22,7 @@ async def change_flag(message: types.Message):
         reply_markup=create_keyboard(keyboard_name="back_keyboard")
     )
     await message.answer(
-        text=All_Text.graph_request[0]
+        text=all_text.graph_request[0]
     )
 
     config.make_graph_flag = True
@@ -34,7 +34,7 @@ async def create_graph(message: types.Message):
     
     if counter < 4:
         await message.answer(
-            text=All_Text.graph_request[counter]
+            text=all_text.graph_request[counter]
         )
 
 

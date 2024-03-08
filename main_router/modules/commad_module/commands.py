@@ -2,13 +2,13 @@ from aiogram import F, Router, types
 from aiogram.filters import Command
 from os import system 
 
-from all_text import All_Text
 from main_router.modules.graph_module import graph
 from main_router.modules.ep_module import equilibrium_point as ep
 from main_router.modules.def_surp_module import deficit_and_surplus as def_surp
 from main_router.modules.profit_module import profit
 from keyboards import create_keyboard
 
+import all_text
 import config
 
 router = Router(name=__name__)
@@ -78,10 +78,10 @@ async def send_date():
 async def handle_start(message: types.Message):
 
     await message.answer(
-        text=(f"Приветствую, {message.from_user.full_name}{All_Text.emoji['e_hello']}" + All_Text.start_main_text),
+        text=(f"Приветствую, {message.from_user.full_name}{all_text.emoji['e_hello']}" + all_text.start_main_text),
         reply_markup=create_keyboard(keyboard_name="start_keyboard")
     )
-    await message.answer(text=All_Text.second_start_main_text)
+    await message.answer(text=all_text.second_start_main_text)
 
     reset_data()
 
@@ -89,7 +89,7 @@ async def handle_start(message: types.Message):
 @router.message(Command("help"))
 async def help(message: types.Message):
     await message.answer(
-        text=All_Text.help_main_text,
+        text=all_text.help_main_text,
         reply_markup=create_keyboard(keyboard_name="help_keyboard")
     )
 
@@ -110,10 +110,9 @@ async def settings(message: types.Message):
 
     config.settings_flag = True
 
-    text = All_Text()
-    text.update_solution_text(config.solution_ep_flag, config.solution_def_surp_flag)
+    all_text.update_solution_text(config.solution_ep_flag, config.solution_def_surp_flag)
 
     await message.answer(
-        text=text.solution_flag_text,
+        text=all_text.solution_flag_text,
         reply_markup=create_keyboard("settings_keyboard")
     )
