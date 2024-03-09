@@ -49,15 +49,13 @@ async def determine_def_surp(message: types.Message) -> None:
         D = coefficients[3]
         E = coefficients[4]
 
-        P = round((C + B)/(A + D), 2)
-
-        condition = ""
-        if P > E: condition = "дефицита"
-        elif P < E: condition = "излишка"
-        else: condition = "равновесия"
-
         Qd = A*E - B
         Qs = C - D*E
+
+        condition = ""
+        if Qd > Qs: condition = "дефицита"
+        elif Qs > Qd: condition = "излишка"
+        else: condition = "равновесия"
 
         if Qd < 0: Qd = 0
         if Qs < 0: Qs = 0
@@ -66,7 +64,7 @@ async def determine_def_surp(message: types.Message) -> None:
 
         if config.solution_def_surp_flag:
             await message.answer(
-                text=all_text.create_solution_def_surp_text(A, B, C, D, E, P, Qd, Qs, Q, condition)
+                text=all_text.create_solution_def_surp_text(A, B, C, D, E, Qd, Qs, Q, condition)
             )
         text = f"Размер {condition} составит: {Q} ед. товара"  if condition != "равновесия" else ''
         await message.answer(

@@ -22,7 +22,13 @@ stickers =[
         types.FSInputFile("photo\stickers\sitcker4.jpg"),
         types.FSInputFile("photo\stickers\sitcker5.jpg"),
         types.FSInputFile("photo\stickers\sitcker6.jpg"),
-        types.FSInputFile("photo\stickers\sitcker7.jpg")
+        types.FSInputFile("photo\stickers\sitcker7.jpg"),
+        types.FSInputFile("photo\stickers\sitcker8.jpg"),
+        types.FSInputFile("photo\stickers\sitcker9.jpg"),
+        types.FSInputFile("photo\stickers\sitcker10.jpg"),
+        types.FSInputFile("photo\stickers\sitcker11.jpg"),
+        types.FSInputFile("photo\stickers\sitcker12.jpg"),
+        types.FSInputFile("photo\stickers\sitcker13.jpg"),
     ]
 
 sticker_for_voice = types.FSInputFile("photo\stickers\sticker_for_voice.jpg")
@@ -32,7 +38,7 @@ sticker_for_voice_note = types.FSInputFile("photo\stickers\\video_mes.jpg")
 @router.message(F.sticker)
 async def sticker_react(message: types.Message):
     
-    sticker = stickers[randint(0, 6)]
+    sticker = stickers[randint(0, len(stickers)-1)]
 
     await message.answer_sticker(sticker=sticker)
 

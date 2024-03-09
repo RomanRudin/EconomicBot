@@ -25,6 +25,10 @@ def reset_data():
     ep.coefficients = []
     config.calculate_ep_flag = False
 
+    def_surp.request_counter = 1
+    def_surp.coefficients = []
+    config.determine_def_surp_flag = False
+
     profit.request_counter = 1
     profit.coefficients = []
     config.calculate_profit_flag = False
@@ -34,8 +38,6 @@ def reset_data():
     config.calculate_profit_flag = False
 
     config.settings_flag = False
-
-    config.determine_def_surp_flag = False
 
     
 

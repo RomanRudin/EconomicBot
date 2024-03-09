@@ -46,7 +46,6 @@ async def create_graph(message: types.Message):
     counter += 1
 
     if len(request_data) == 4:
-        print(request_data)
         graph_path = draw_graph(
             request_data[0],
             request_data[1],
