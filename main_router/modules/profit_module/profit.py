@@ -20,7 +20,7 @@ async def start_profit(message: types.Message):
 
     text = f"""
 Расчет прибыли фирмы
-Показывать реiение: {all_text.emoji["e_condiction"][config.solution_progit_flag]}
+Показывать решение: {all_text.emoji["e_condiction"][config.solution_progit_flag]}
 """
 
     await message.answer(
