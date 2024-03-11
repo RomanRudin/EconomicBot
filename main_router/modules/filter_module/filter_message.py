@@ -126,23 +126,23 @@ async def text_react(message: types.Message):
         if not (config.profit_fc_flag or config.profit_vc_flag):
             try:
                 int(message.text)
-                await get_request(message)
+                if int(message.text) < 0:
+                    await message.answer(all_text.incorrect_negative_num_text)
+                    await message.answer(all_text.correct_data_example)
+                else:
+                    await get_request(message)
 
             except ValueError:
                 await message.answer(all_text.incorrect_num_text)
                 await message.answer(all_text.correct_data_example)
 
-        elif config.profit_fc_flag or config.profit_vc_flag:
+        else:
             check_data = create_data_list(text_message=message.text, check=True)
 
             if check_data[0]:
                 await get_request(message)
             else:
                 await message.answer(text=check_data[1])
-
-        else:
-            await message.answer(text=all_text.incorrect_negative_num_text)
-
 
     else:
         await message.answer(all_text.incorrect_command)

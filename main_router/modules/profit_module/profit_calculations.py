@@ -9,7 +9,7 @@
 
 import all_text
 
-def create_data_list(text_message: str, check: bool = False) -> list | tuple:
+def create_data_list(text_message: str, check: bool = False) -> list | tuple | int:
     """ обрабатывает введенные данные о издержках и создает массивы этих издержек """    
 
     data_list = []
@@ -21,6 +21,10 @@ def create_data_list(text_message: str, check: bool = False) -> list | tuple:
         if check:
             return True, incorrect_text
         return 0
+    
+    if text_message.isdigit() and check:
+        incorrect_text = all_text.incorrect_profit_data_text
+        return False, incorrect_text
 
     if text_message.endswith(";"):
         text_message = text_message[:-1]
