@@ -1,3 +1,7 @@
+"""
+Подключение роутера файла profit к основному файлу пакета profit_module
+"""
+
 from aiogram import Router
 
 from .profit import router as profit_router

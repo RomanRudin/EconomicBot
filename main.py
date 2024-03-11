@@ -1,3 +1,7 @@
+"""
+Подключение и запуск бота
+"""
+
 import asyncio
 
 from aiogram import Bot, Dispatcher
@@ -13,6 +17,8 @@ dp.include_router(main_router)
 
 
 async def main():
+    """ запуск обработки запросов бота """
+
     await dp.start_polling(bot)
 
 

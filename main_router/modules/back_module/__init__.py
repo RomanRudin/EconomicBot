@@ -1,3 +1,7 @@
+"""
+Подключение роутера файла back к основному файлу пакета back_module
+"""
+
 from aiogram import Router
 
 from .back import router as help_router

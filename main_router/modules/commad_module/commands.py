@@ -1,6 +1,13 @@
+"""
+Обработчики комманд
+
+Содержит функцию для сброса флагов и данных, необходимых для решения задач
+"""
+
+from os import system
 from aiogram import F, Router, types
 from aiogram.filters import Command
-from os import system 
+
 
 from main_router.modules.graph_module import graph
 from main_router.modules.ep_module import equilibrium_point as ep
@@ -15,6 +22,8 @@ router = Router(name=__name__)
 
 
 def reset_data():
+    """ сбрасывает флаги и данные, необходимые для решения задач """
+
     graph.counter = 1
     graph.request_data = []
     config.make_graph_flag = False
@@ -39,12 +48,15 @@ def reset_data():
 
     config.settings_flag = False
 
-    
+
 
 async def send_date():
+    """ 
+    *функция для отладки*
+    отправляет в консоль данные о флагах и данных
+    """
 
-    clear = lambda: system('cls')
-    clear()
+    system('cls')
 
     print(f"{'-'*10}graph{'-'*10}")
     print(f"counter: {graph.counter}")
@@ -53,7 +65,7 @@ async def send_date():
     print(f"{'-'*10}equilibrium point{'-'*10}")
     print(f"counter: {ep.request_counter}")
     print(f"coefficients: {ep.coefficients}")
-    
+
     print(f"{'-'*10}deficit and surplus{'-'*10}")
     print(f"counter: {def_surp.request_counter}")
     print(f"coefficients: {def_surp.coefficients}")
@@ -73,14 +85,17 @@ async def send_date():
     print(f"settings_flag:------------{config.settings_flag}")
     print(f"solution_ep_flag:---------{config.solution_ep_flag}")
     print(f"solution_def_surp_flag:---{config.solution_def_surp_flag}")
+    print(f"solution_def_surp_flag:---{config.solution_progit_flag}")
 
 
 
 @router.message(Command("start"))
 async def handle_start(message: types.Message):
+    """ обработка команды /start """
 
     await message.answer(
-        text=(f"Приветствую, {message.from_user.full_name}{all_text.emoji['e_hello']}" + all_text.start_main_text),
+        text=(f"Приветствую, {message.from_user.full_name}{all_text.emoji['e_hello']}" \
+                    + all_text.start_main_text),
         reply_markup=create_keyboard(keyboard_name="start_keyboard")
     )
     await message.answer(text=all_text.second_start_main_text)
@@ -89,7 +104,9 @@ async def handle_start(message: types.Message):
 
 
 @router.message(Command("help"))
-async def help(message: types.Message):
+async def help_com(message: types.Message):
+    """ обработка команды /help """
+
     await message.answer(
         text=all_text.help_main_text,
         reply_markup=create_keyboard(keyboard_name="help_keyboard")
@@ -101,18 +118,22 @@ async def help(message: types.Message):
 
 @router.message(Command("data"))
 async def data(message: types.Message):
+    """ обработка команды /data """
+
     await send_date()
     await message.delete()
 
 
 @router.message(Command('settings'))
 async def settings(message: types.Message):
+    """ обработка команды /settings """
 
     reset_data()
 
     config.settings_flag = True
 
-    all_text.update_solution_text(config.solution_ep_flag, config.solution_def_surp_flag)
+    all_text.update_solution_text(config.solution_ep_flag,
+                                  config.solution_def_surp_flag, config.solution_progit_flag)
 
     await message.answer(
         text=all_text.solution_flag_text,

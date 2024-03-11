@@ -1,3 +1,9 @@
+""" 
+Здесь находятся все шаблоны клавиатур,
+
+функции для генерации клавиатур и для обновления клавиатуры в меню настроек
+"""
+
 from aiogram import types
 
 import all_text
@@ -44,6 +50,11 @@ keyboards = {
             )
         ],
         [
+            types.KeyboardButton(
+                text=all_text.button_switch_solution['profit'][config.solution_progit_flag]
+            )
+        ],
+        [
             types.KeyboardButton(text=all_text.button_back_to_menu)
         ]
     ],
@@ -60,6 +71,8 @@ keyboards = {
 
 
 def update_settings_keyboard():
+    """ обновление клавиатуры в меню настроек """
+
     keyboards["settings_keyboard"] =[
         [
             types.KeyboardButton(
@@ -70,19 +83,24 @@ def update_settings_keyboard():
             )
         ],
         [
+            types.KeyboardButton(
+                text=all_text.button_switch_solution['profit'][config.solution_progit_flag]
+            )
+        ],
+        [
             types.KeyboardButton(text=all_text.button_back_to_menu)
         ]
     ]
 
 
 def create_keyboard(keyboard_name: str) -> types.ReplyKeyboardMarkup:
-    
+    """ генерация клавиатур по названию из списка keyboards """    
+
     kb = keyboards[keyboard_name]
 
     keyboard = types.ReplyKeyboardMarkup(
        keyboard=kb,
        resize_keyboard=True,
-       input_field_placeholder=all_text.keyboard_text_start 
+       input_field_placeholder=all_text.keyboard_text_start
     )
-    
     return keyboard

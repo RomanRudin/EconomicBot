@@ -18,8 +18,13 @@ async def start_profit(message: types.Message):
     
     config.calculate_profit_flag = True
 
+    text = f"""
+Расчет прибыли фирмы
+Показывать реiение: {all_text.emoji["e_condiction"][config.solution_progit_flag]}
+"""
+
     await message.answer(
-        text="Расчет прибыли фирмы",
+        text=text,
         reply_markup=create_keyboard("back_keyboard")
     )
 
@@ -66,9 +71,16 @@ async def get_request(message: types.Message, skip: bool = False):
     request_counter += 1
 
     if request_counter == 5:
-        
+
+        answer_text = calculate_profit(coefficients)
+
+        if config.solution_progit_flag:
+            await message.answer(
+                text=answer_text[1]
+            )
+
         await message.answer(
-            text=calculate_profit(coefficients)
+            text=answer_text[0]
         )
 
         await message.answer(

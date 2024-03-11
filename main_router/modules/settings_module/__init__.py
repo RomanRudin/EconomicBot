@@ -1,3 +1,7 @@
+"""
+Подключение роутера файла settings к основному файлу пакета settings_module
+"""
+
 from aiogram import Router
 
 from .settings import router as set_router

@@ -1,3 +1,7 @@
+"""
+Подключение роутера файла commands к основному файлу пакета command_module
+"""
+
 from aiogram import Router
 
 from .commands import router as commands_router

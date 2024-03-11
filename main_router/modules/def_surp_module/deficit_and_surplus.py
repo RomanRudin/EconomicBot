@@ -1,3 +1,9 @@
+"""
+Обработка нажатия на кнопку 'Определить дефицит/излишек.',
+обработка введенных для определения дефицита/излишка,
+расчет дефицита/излишка
+"""
+
 from aiogram import Router, types, F
 
 from keyboards import create_keyboard
@@ -14,7 +20,8 @@ request_counter = 1
 
 
 @router.message(F.text == all_text.button_deficit_and_surplus)
-async def back_to_menu(message: types.Message):
+async def def_and_surp(message: types.Message):
+    """ обработка нажатия на кнопку 'Определить дефицит/излишек.' """
 
     text = f"""
 Определение дефицита/излишка товара
@@ -32,43 +39,54 @@ async def back_to_menu(message: types.Message):
 
 
 async def determine_def_surp(message: types.Message) -> None:
+    """ обработка введенных данных, расчет дефицита/излишка """
+
     global coefficients, request_counter
 
     if request_counter < 5:
         await message.answer(text=all_text.def_surp_request[request_counter])
         request_counter += 1
 
-    arg = int(float(message.text)) if int(float(message.text)) == float(message.text) else float(message.text)
+    arg = int(float(message.text)) if int(float(message.text)) == float(message.text) \
+                                        else float(message.text)
     coefficients.append(arg)
 
     if len(coefficients) == 5:
-        
-        A = coefficients[0]
-        B = coefficients[1]
-        C = coefficients[2]
-        D = coefficients[3]
-        E = coefficients[4]
 
-        Qd = A*E - B
-        Qs = C - D*E
+        a = coefficients[0]
+        b = coefficients[1]
+        c = coefficients[2]
+        d = coefficients[3]
+        e = coefficients[4]
+
+        qd = a*e - b
+        qs = c - d*e
 
         condition = ""
-        if Qd > Qs: condition = "дефицита"
-        elif Qs > Qd: condition = "излишка"
-        else: condition = "равновесия"
+        if qd > qs:
+            condition = "дефицита"
+        elif qs > qd:
+            condition = "излишка"
+        else:
+            condition = "равновесия"
 
-        if Qd < 0: Qd = 0
-        if Qs < 0: Qs = 0
+        if qd < 0:
+            qd = 0
+        if qs < 0:
+            qs = 0
 
-        Q = abs(Qd - Qs) 
+        q = abs(qd - qs)
 
         if config.solution_def_surp_flag:
             await message.answer(
-                text=all_text.create_solution_def_surp_text(A, B, C, D, E, Qd, Qs, Q, condition)
+                text=all_text.create_solution_def_surp_text(a, b, c, d, e, qd, qs, q, condition)
             )
-        text = f"Размер {condition} составит: {Q} ед. товара"  if condition != "равновесия" else ''
+        text_1 = f"""{'Таким образом,' if config.solution_def_surp_flag else 'Итого:'}
+при уровне цены в {e} денежных единиц на рынке будет ситуация {condition}. """
+        text_2 = f"Размер {condition} составит: {q} ед. товара"  if condition != "равновесия" \
+                                                                    else ''
         await message.answer(
-                text=f"{'Таким образом,' if config.solution_def_surp_flag else 'Итого:'} при уровне цены в {E} денежных единиц на рынке будет ситуация {condition}. {text}"
+                text=text_1 + text_2
         )
         await message.answer(
             text="Что-нибудь еще?",
