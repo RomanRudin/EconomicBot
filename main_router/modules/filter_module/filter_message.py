@@ -5,9 +5,6 @@
 или вызывает соответствующие методы
 """
 
-import traceback
-
-from random import randint
 from aiogram import Router, F, types
 
 from main_router.modules.help_module.help import info_message
@@ -21,49 +18,6 @@ import all_text
 import config
 
 router = Router(name=__name__)
-
-
-stickers =[
-        types.FSInputFile("photo\\stickers\\sitcker1.jpg"),
-        types.FSInputFile("photo\\stickers\\sitcker2.jpg"),
-        types.FSInputFile("photo\\stickers\\sitcker3.jpg"),
-        types.FSInputFile("photo\\stickers\\sitcker4.jpg"),
-        types.FSInputFile("photo\\stickers\\sitcker5.jpg"),
-        types.FSInputFile("photo\\stickers\\sitcker6.jpg"),
-        types.FSInputFile("photo\\stickers\\sitcker7.jpg"),
-        types.FSInputFile("photo\\stickers\\sitcker8.jpg"),
-        types.FSInputFile("photo\\stickers\\sitcker9.jpg"),
-        types.FSInputFile("photo\\stickers\\sitcker10.jpg"),
-        types.FSInputFile("photo\\stickers\\sitcker11.jpg"),
-        types.FSInputFile("photo\\stickers\\sitcker12.jpg"),
-        types.FSInputFile("photo\\stickers\\sitcker13.jpg"),
-    ]
-
-sticker_for_voice = types.FSInputFile("photo\\stickers\\sticker_for_voice.jpg")
-sticker_for_voice_note = types.FSInputFile("photo\\stickers\\video_mes.jpg")
-
-
-@router.message(F.sticker)
-async def sticker_react(message: types.Message):
-    """ ответ на стикер """
-
-    sticker = stickers[randint(0, len(stickers)-1)]
-
-    await message.answer_sticker(sticker=sticker)
-
-
-@router.message(F.video_note)
-async def voice_mes_react(message: types.Message):
-    """ ответ на видеосообщение (кружочек) """
-
-    await message.answer_sticker(sticker_for_voice_note)
-
-
-@router.message(F.voice)
-async def voice_react(message: types.Message):
-    """ ответ на голосовое сообщение """
-
-    await message.answer_sticker(sticker_for_voice)
 
 
 @router.message(~F.text)
@@ -83,7 +37,7 @@ async def text_react(message: types.Message):
     if config.help_flag and message.text in "1234":
         id_mes = int(message.text)
         if 1 <= id_mes <= 4:
-            await info_message(message, id_mes)
+            await info_message(message)
         else:
             await message.answer(all_text.incorrect_num_text)
 
@@ -118,7 +72,6 @@ async def text_react(message: types.Message):
         except ValueError:
             await message.answer(all_text.incorrect_num_text)
             await message.answer(all_text.correct_data_example)
-            traceback.print_exc()
 
 
     elif config.calculate_profit_flag:

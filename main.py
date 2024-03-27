@@ -7,10 +7,10 @@ import asyncio
 from aiogram import Bot, Dispatcher
 
 from main_router import router as main_router
-from config import BOT_TOCKEN
+from config import BOT_TOKEN
 
 
-bot = Bot(token=BOT_TOCKEN)
+bot = Bot(token=BOT_TOKEN)
 dp = Dispatcher()
 
 dp.include_router(main_router)

@@ -57,12 +57,12 @@ async def calculate_ep(message: types.Message) -> None:
         d = coefficients[3]
 
         # qd = ap - b
-        # qs = c - dp
-        # ap - b = c - dp
-        # ap + dp = c + b
-        # p = (c + b)/(a + d)
+        # qs = c + dp
+        # ap - b = c + dp
+        # ap - dp = c + b
+        # p = (c + b)/(a - d)
 
-        p = round((c + b)/(a + d), 2)
+        p = round((c + b)/(a - d), 2)
 
         q = round((a*p - b), 2)
 
@@ -70,15 +70,15 @@ async def calculate_ep(message: types.Message) -> None:
             await message.answer(
                 text=all_text.create_solution_ep_text(a, b, c, d, p, q)
             )
-        if q < 0:
-            text_1 = "При заданных коэффициентах равновесный объем Q меньше нуля."
+        if p < 0:
+            text_1 = "При заданных коэффициентах равновесный цена P меньше нуля."
             text_2 = "\nПрошу, попробуйте ввести другие коэффициенты."
             await message.answer(
                 text=text_1+text_2,
                 reply_markup=create_keyboard("start_keyboard")
             )
-        elif p < 0:
-            text_1 = "При заданных коэффициентах равновесный цена P меньше нуля."
+        elif q < 0:
+            text_1 = "При заданных коэффициентах равновесный объем Q меньше нуля."
             text_2 = "\nПрошу, попробуйте ввести другие коэффициенты."
             await message.answer(
                 text=text_1+text_2,

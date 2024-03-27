@@ -3,7 +3,7 @@
 """
 
 # tocken
-BOT_TOCKEN = "7006208538:AAFw5tgTLKQEtGwM6-RnuH1u8sI3h-rL-aI"
+BOT_TOKEN = "7006208538:AAFw5tgTLKQEtGwM6-RnuH1u8sI3h-rL-aI"
 
 # flags
 calculate_ep_flag = False

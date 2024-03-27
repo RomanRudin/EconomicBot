@@ -15,7 +15,7 @@ def create_data_list(text_message: str, check: bool = False) -> list | tuple | i
     data_list = []
     data_value = ""
     correct = False
-    incorrect_text = ""
+    incorrect_text = all_text.incorrect_profit_data_text
 
     if text_message == "0" or text_message == all_text.button_none_costs:
         if check:
@@ -23,7 +23,6 @@ def create_data_list(text_message: str, check: bool = False) -> list | tuple | i
         return 0
     
     if text_message.isdigit() and check:
-        incorrect_text = all_text.incorrect_profit_data_text
         return False, incorrect_text
 
     if text_message.endswith(";"):
@@ -65,7 +64,6 @@ def create_data_list(text_message: str, check: bool = False) -> list | tuple | i
                 list_costs.append((text_costs.replace("ъъъъ", " "), int(value_costs)))
             except ValueError:
                 correct = False
-                incorrect_text = all_text.incorrect_profit_data_text
     else:
         correct = False
         incorrect_text = all_text.incorrect_profit_num_data_text

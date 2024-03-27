@@ -60,7 +60,7 @@ async def determine_def_surp(message: types.Message) -> None:
         e = coefficients[4]
 
         qd = a*e - b
-        qs = c - d*e
+        qs = c + d*e
 
         condition = ""
         if qd > qs:
