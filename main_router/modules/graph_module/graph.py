@@ -1,9 +1,15 @@
+"""
+Обработка нажатия кнопки 'Построить общую КПВ.',
+вызов функции для создания графика,
+вывод графика
+"""
+
 from aiogram import F, Router, types
 
-from all_text import All_Text
 from keyboards import create_keyboard
 from main_router.modules.graph_module.create_graph import draw_graph
 
+import all_text
 import config
 
 router = Router(name=__name__)
@@ -13,28 +19,29 @@ counter = 1
 request_data = []
 
 
-@router.message(F.text == All_Text.button_graph)
+@router.message(F.text == all_text.button_graph)
 async def change_flag(message: types.Message):
-
+    """ обработка нажатия кнопки 'Построить общую КПВ.' """
 
     await message.answer(
         text="Построение графика КПВ",
         reply_markup=create_keyboard(keyboard_name="back_keyboard")
     )
     await message.answer(
-        text=All_Text.graph_request[0]
+        text=all_text.graph_request[0]
     )
 
     config.make_graph_flag = True
 
 
 async def create_graph(message: types.Message):
+    """ обработка введенных данных, вывод графика КПВ """
+
     global counter, request_data
-    
-    
+
     if counter < 4:
         await message.answer(
-            text=All_Text.graph_request[counter]
+            text=all_text.graph_request[counter]
         )
 
 
@@ -46,7 +53,6 @@ async def create_graph(message: types.Message):
     counter += 1
 
     if len(request_data) == 4:
-        print(request_data)
         graph_path = draw_graph(
             request_data[0],
             request_data[1],

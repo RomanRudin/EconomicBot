@@ -1,4 +1,6 @@
-__all__ = ("router", )
+"""
+Подключение роутера файла filter_message к основному файлу пакета filter_module
+"""
 
 from aiogram import Router
 

@@ -1,4 +1,7 @@
-__all__ = ("router", )
+"""
+Подключение роутера файла equilibrium_point 
+к основному файлу пакета ep_module
+"""
 
 from aiogram import Router
 

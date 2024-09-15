@@ -1,4 +1,7 @@
-__all__ = ("router", )
+"""
+Подключение роутера файла deficit_and_surplus 
+к основному файлу пакета def_surp_module
+"""
 
 from aiogram import Router
 

@@ -1,4 +1,6 @@
-__all__ = ("router", )
+"""
+Подключение роутера файла back к основному файлу пакета back_module
+"""
 
 from aiogram import Router
 

@@ -1,4 +1,6 @@
-__all__ = ("router", )
+"""
+Подключение роутера файла commands к основному файлу пакета command_module
+"""
 
 from aiogram import Router
 
